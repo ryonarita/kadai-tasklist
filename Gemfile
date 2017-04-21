@@ -54,3 +54,9 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # kaminari
 gem 'kaminari'
+
+# bootstrap
+
+group :production do
+  gem 'pg'
+end
