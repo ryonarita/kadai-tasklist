@@ -1,5 +1,8 @@
 class TasksController < ApplicationController
-before_action :set_task, only:[:show, :edit, :update, :destroy]
+  before_action :set_task, only:[:show, :edit, :update, :destroy]
+  before_action :require_user_logged_in
+  before_action :correct_user, only: [:destroy]
+
  def index
   @tasks = Task.all
  end
@@ -62,7 +65,7 @@ before_action :set_task, only:[:show, :edit, :update, :destroy]
  # Strong Parameter
   def task_params
 #    params.require(:task).permit(:content)
-    params.require(:task).permit(:content, :status)
+    params.require(:task).permit(:content, :status, :user_id)
 
   end
 
