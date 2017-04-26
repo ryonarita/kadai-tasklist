@@ -63,6 +63,8 @@ class TasksController < ApplicationController
   def set_task
      @task = Task.find(params[:id])
   end
+  
+  private
  
  # Strong Parameter
   def task_params
@@ -74,7 +76,6 @@ class TasksController < ApplicationController
      params.require(:task).permit(:content, :status)
   end
   
-  private
   
   def correct_user
     @task = current_user.tasks.find_by(id: params[:id])
