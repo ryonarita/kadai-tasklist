@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-  before_action :set_task, only:[:show, :edit, :update, :destroy]
+  before_action :set_task, only:[:show, :edit, :update]
   before_action :require_user_logged_in
   before_action :correct_user, only: [:destroy]
 
@@ -8,10 +8,11 @@ class TasksController < ApplicationController
  end
 
  def create
-   @task = Task.new(task_params)
-
+   @task = current_user.tasks.build(task_params)
+   
     if @task.save
       flash[:success] = 'Task が正常に投稿されました'
+      #redirect_to @task
       redirect_to @task
       # HTTPリクエストを発生させるためflash
     else
@@ -19,6 +20,7 @@ class TasksController < ApplicationController
       render :new
       # HTTPリクエスト発生させないためflash.now
     end
+    
  end
 
  def new
@@ -49,11 +51,10 @@ class TasksController < ApplicationController
  end
 
  def destroy
-#    @task = Task.find(params[:id])
+#   @task = Task.find(params[:id])
     @task.destroy
-
-    flash[:success] = 'Task は正常に削除されました'
-    redirect_to tasks_url
+    flash[:success] = 'タスクが消えたよ！'
+    #redirect_to @task
     # リダイレクトのときは_url
  end
  
@@ -66,8 +67,19 @@ class TasksController < ApplicationController
   def task_params
 #    params.require(:task).permit(:content)
     params.require(:task).permit(:content, :status, :user_id)
-
   end
-
+  
+  def task_params2
+     params.require(:task).permit(:content, :status)
+  end
+  
+  private
+  
+  def correct_user
+    @task = current_user.tasks.find_by(id: params[:id])
+    unless @task
+    redirect_to root_path
+    end
+  end
 
 end
